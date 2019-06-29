@@ -30,6 +30,13 @@ func setVal(t string, v string) (interface{}, error) {
 		}
 		ret = i
 
+	case "uint":
+		u, err := strconv.ParseUint(v, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		ret = u
+
 	case "float":
 		f, err := strconv.ParseFloat(v, 64)
 		if err != nil {

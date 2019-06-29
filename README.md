@@ -78,7 +78,7 @@ request to `/`，get cookie:
 decode it
 
 ```
-λ .\faker.exe -dec -n session -k xxxxxxxxxxxx -c "MTU2MTE4NjIzNnxEdi1CQkFFQ180SUFBUkFC RUFBQVVQLUNBQU1HYzNSeWFXNW5EQVlBQkhWelpYSUdjM1J5YVc1bkRBWUFCSFJsYzNRR2MzUnlhVzVuREFRQUFtbGtBMmx1ZEFRREFQX0lCbk4wY21sdVp3d0hBQVZ3YjJsdWRBTnBiblFFQWdBQXxlwq6mxtwXuKDMeXOyDaHpR-Hcn0veF2OmBqc4F76puQ=="
+λ .\faker.exe dec -n session -k xxxxxxxxxxxx -c "MTU2MTE4NjIzNnxEdi1CQkFFQ180SUFBUkFC RUFBQVVQLUNBQU1HYzNSeWFXNW5EQVlBQkhWelpYSUdjM1J5YVc1bkRBWUFCSFJsYzNRR2MzUnlhVzVuREFRQUFtbGtBMmx1ZEFRREFQX0lCbk4wY21sdVp3d0hBQVZ3YjJsdWRBTnBiblFFQWdBQXxlwq6mxtwXuKDMeXOyDaHpR-Hcn0veF2OmBqc4F76puQ=="
 map[id:100 point:0 user:test]
 type detail:
 {
@@ -91,7 +91,7 @@ type detail:
 fake identity
 
 ```
-λ .\faker.exe -enc -n session -k xxxxxxxxxxxx -o "{user:admin, id:0[int], point:99999[ int]}"
+λ .\faker.exe enc -n session -k xxxxxxxxxxxx -o "{user:admin, id:0[int], point:99999[ int]}"
 MTU2MTE4NjQzNHxFXy1CQkFFQkEwOWlhZ0hfZ2dBQkVBRVFBQUJUXzRJQUF3WnpkSEpwYm1jTUJnQUVkWE5sY2daemRISnBibWNNQndBRllXUnRhVzRHYzNSeWFXNW5EQVFBQW1sa0EybHVkQVFDQUFBR2MzUnlhVzVuREFjQUJYQnZhVzUwQTJsdWRBUUZBUDBERFQ0PXwKR14WwPjXeUBZlZ0sKcEfRu-n7_va9drjsFaIEVahmA==
 ```
 
@@ -111,7 +111,7 @@ or
 ```
 git clone https://github.com/eddieivan01/secure-cookie-faker.git
 cd secure-cookie-faker
-go build -ldflags="-s -w" -o faker && ./faker
+go build -ldflags="-s -w" -o faker
 ```
 
 or
@@ -125,33 +125,35 @@ download binary file from [releases page](https://github.com/eddieivan01/secure-
 ```
 Secure Cookie Faker v0.1
 
-Usage: faker [-enc/dec] [-n cookie_name] [-k secret_key] [-o object_string / -c cookie_string]
+Usage: faker [enc/dec] [-n cookie_name] [-k secret_key] [-o object_string / -c cookie_string]
+
+Mode: 
+  dec
+        decode mode, cookie => object
+  enc
+        encode mode, object => cookie
 
 Options:
-  -c string
-​        cookie to be decoded
-​        if mode is decode, this param is required
-  -dec
-​        decode mode, cookie => object
-  -enc
-​        encode mode, object => cookie
-  -h    show help
+  --help    show help
   -k string
-​        secret keys, string like "key" or "key1, key2, key3"
+        secret keys, string like "key" or "key1, key2, key3"
   -n string
-​        cookie name
+        cookie name
   -o string
-​        object to be encoded, string like "{key1[type]: value1[type], key2[type]: value2[type]}"
-​        type could be `int`, `float`, `bool`, `string`, `byte`
-​        when type is `string`, it could be omitted. like this {str1: str2}
-​        if mode is encode, this param is required
+        object to be encoded, string like "{key1[type]: value1[type], key2[type]: value2[type]}"
+        type could be `int`, `float`, `bool`, `string`, `byte`
+        when type is `string`, it could be omitted. like this {str1: str2}
+        if mode is encode, this param is required
+  -c string
+        cookie to be decoded
+        if mode is decode, this param is required
 ```
 
 ## Example
 
 choosing a mode is required: enc or dec
 ```
-./faker -dec -n "mysession" -k "secret_key" -c "MTU2MTE4NjQzNHxFXy1CQkFFQkEwOWlhZ0hfZ2dBQkVBRVFBQUJUXzRJQUF3WnpkSEpwYm1jTUJnQUVkWE5sY2daemRISnBibWNNQndBRllXUnRhVzRHYzNSeWFXNW5EQVFBQW1sa0EybHVkQVFDQUFBR2MzUnlhVzVuREFjQUJYQnZhVzUwQTJsdWRBUUZBUDBERFQ0PXwKR14WwPjXeUBZlZ0sKcEfRu-n7_va9drjsFaIEVahmA=="
+./faker dec -n "mysession" -k "secret_key" -c "MTU2MTE4NjQzNHxFXy1CQkFFQkEwOWlhZ0hfZ2dBQkVBRVFBQUJUXzRJQUF3WnpkSEpwYm1jTUJnQUVkWE5sY2daemRISnBibWNNQndBRllXUnRhVzRHYzNSeWFXNW5EQVFBQW1sa0EybHVkQVFDQUFBR2MzUnlhVzVuREFjQUJYQnZhVzUwQTJsdWRBUUZBUDBERFQ0PXwKR14WwPjXeUBZlZ0sKcEfRu-n7_va9drjsFaIEVahmA=="
 ```
 
 `-n` means the cookie name, its required because the cookie generation relies on it
@@ -165,20 +167,20 @@ choosing a mode is required: enc or dec
 when encode a object
 
 ```
-./faker -enc -n "mysession" -k "secret" -o "{user: admin, id: 0[int]}"
+./faker enc -n "mysession" -k "secret" -o "{user: admin, id: 0[int]}"
 ```
 
 `-o `means the object string，its like a K-V map. 
 
 when the element is `string` type, the type tag can be omitted
 
-the type tag can only be `int`, `float`, `bool`, `string`, `byte`
+the type tag can only be `int`,  `uint`,  `float`,  `bool`,  `string`,  `byte`
 
 ***
 
 ## Feature
 
-* CLI tool to fake session-cookie, and if you need, you can take it as a library function, all necessary variables are exportable
+* CLI tool to fake session-cookie
 * parse the type hint when decoding / choose the type when encoding
 
 ***
@@ -186,6 +188,3 @@ the type tag can only be `int`, `float`, `bool`, `string`, `byte`
 ## TODO
 
 - [ ] support slice type
-```
-
-```

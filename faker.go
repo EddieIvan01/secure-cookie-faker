@@ -27,16 +27,16 @@ var (
 func init() {
 	enc.StringVar(&object, "o", "",
 		"object to be encoded, `string` like \"{key1[type]: value1[type], key2[type]: value2[type]}\"\n"+
-			"type could be `int`, `uint`, `float`, `bool`, `string`, `byte`\n"+
+			"type hint could be `int`, `uint`, `float`, `bool`, `string`, `byte`\n"+
 			"when type is `string`, it could be omitted. like this {str1: str2}\n")
 	enc.StringVar(&sessionName, "n", "", "cookie name")
 	enc.StringVar(&secretKey, "k", "",
 		"secret keys, string like \"key\" or \"key1, key2, key3\"")
 
 	dec.StringVar(&cookie, "c", "", "cookie to be decoded")
-	dec.StringVar(&sessionName, "n", "", "cookie name")
+	dec.StringVar(&sessionName, "n", "", "the cookie name")
 	dec.StringVar(&secretKey, "k", "",
-		"secret keys, string like \"key\" or \"key1, key2, key3\"")
+		"secret keys, string like \"key\" or multiple keys like \"key1, key2, key3\"")
 
 	enc.Usage = usage
 	dec.Usage = usage

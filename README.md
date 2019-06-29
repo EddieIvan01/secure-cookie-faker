@@ -136,12 +136,12 @@ Mode:
 Options:
   --help    show help
   -k string
-        secret keys, string like "key" or "key1, key2, key3"
+        secret keys, string like "key" or multiple keys like "key1, key2, key3"
   -n string
-        cookie name
+        the cookie name
   -o string
         object to be encoded, string like "{key1[type]: value1[type], key2[type]: value2[type]}"
-        type could be `int`, `float`, `bool`, `string`, `byte`
+        type hint could be `int`, `float`, `bool`, `string`, `byte`
         when type is `string`, it could be omitted. like this {str1: str2}
         if mode is encode, this param is required
   -c string

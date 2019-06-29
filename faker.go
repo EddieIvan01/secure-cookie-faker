@@ -33,8 +33,7 @@ func init() {
 	enc.StringVar(&secretKey, "k", "",
 		"secret keys, string like \"key\" or \"key1, key2, key3\"")
 
-	dec.StringVar(&cookie, "c", "", "cookie to be decoded\n"+
-		"if mode is decode, this param is required")
+	dec.StringVar(&cookie, "c", "", "cookie to be decoded")
 	dec.StringVar(&sessionName, "n", "", "cookie name")
 	dec.StringVar(&secretKey, "k", "",
 		"secret keys, string like \"key\" or \"key1, key2, key3\"")

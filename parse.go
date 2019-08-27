@@ -65,14 +65,14 @@ func setVal(t string, v string) (interface{}, error) {
 }
 
 // KVS is like [["k1[t1]", "v1[t2]"], ["k1[t3]", "v1[t4]"]]
-func (s KVS) parse() (Obj, error) {
+func (s KVS) parseGob() (Obj, error) {
 	var key, value string
 	var keyT, valueT string
 	var k, v interface{}
 	var tmp []string
-
 	var err error
-	o := Obj{}
+
+	o := make(Obj)
 
 	for _, kv := range s {
 		tmp = strings.Split(kv[0], "[")
@@ -107,6 +107,45 @@ func (s KVS) parse() (Obj, error) {
 	return o, nil
 }
 
+// parse JSON: map[string]interface{}
+func (s KVS) parseJSON() (JSON, error) {
+	var key, value string
+	var keyT, valueT string
+	var k, v interface{}
+	var tmp []string
+	var err error
+
+	o := make(JSON)
+
+	for _, kv := range s {
+		tmp = strings.Split(kv[0], "[")
+		key = tmp[0]
+		keyT = "string"
+
+		k, err = setVal(keyT, key)
+		if err != nil {
+			return nil, err
+		}
+
+		tmp = strings.Split(kv[1], "[")
+		value = tmp[0]
+		if len(tmp) == 1 {
+			valueT = "string"
+		} else {
+			valueT = tmp[1][:len(tmp[1])-1]
+		}
+
+		v, err = setVal(valueT, value)
+		if err != nil {
+			return nil, err
+		}
+
+		o[k.(string)] = v
+	}
+
+	return o, nil
+}
+
 // "key" or "key1, key2, key3"
 func ParseSecretKeys(ks string) ([][]byte, error) {
 	if ks == "" {
@@ -125,7 +164,7 @@ func ParseSecretKeys(ks string) ([][]byte, error) {
 }
 
 // "{key1[type]: value1[type], key2[type]: value2[type]}"
-func ParseObjString(s string) (Obj, error) {
+func ParseObjString(s string, serialize string) (interface{}, error) {
 	// trim white space
 	if s == "" {
 		return nil, ErrEmptyParam
@@ -154,10 +193,11 @@ func ParseObjString(s string) (Obj, error) {
 		})
 	}
 
-	ret, err := kvs.parse()
-	if err != nil {
-		return nil, err
+	switch serialize {
+	case "gob":
+		return kvs.parseGob()
+	default:
+		return kvs.parseJSON()
 	}
 
-	return ret, nil
 }

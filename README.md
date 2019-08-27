@@ -54,32 +54,34 @@ Options:
         cookie to be decoded
         if mode is decode, this param is required
   -way string
-        serialize way: gob | json | nop, default is gob (default "gob")
+        serialize way: gob | json | nop(default "gob")
 ```
 
 ## Example
 
 choosing a mode is required: enc or dec
 
+decode cookie
+
 ```
-./faker dec -c "MTU2MTE4NjQzNHxFXy1CQkFFQkEwOWlhZ0hfZ2dBQkVBRVFBQUJUXzRJQUF3WnpkSEpwYm1jTUJnQUVkWE5sY2daemRISnBibWNNQndBRllXUnRhVzRHYzNSeWFXNW5EQVFBQW1sa0EybHVkQVFDQUFBR2MzUnlhVzVuREFjQUJYQnZhVzUwQTJsdWRBUUZBUDBERFQ0PXwKR14WwPjXeUBZlZ0sKcEfRu-n7_va9drjsFaIEVahmA=="
+$ ./faker dec -c "MTU2MTE4NjQzNHxFXy1CQkFFQkEwOWlhZ0hfZ2dBQkVBRVFBQUJUXzRJQUF3WnpkSEpwYm1jTUJnQUVkWE5sY2daemRISnBibWNNQndBRllXUnRhVzRHYzNSeWFXNW5EQVFBQW1sa0EybHVkQVFDQUFBR2MzUnlhVzVuREFjQUJYQnZhVzUwQTJsdWRBUUZBUDBERFQ0PXwKR14WwPjXeUBZlZ0sKcEfRu-n7_va9drjsFaIEVahmA=="
 ```
 
-`-c` : the cookie to be decoded
+`-c`: cookie to be decoded
 
 ***
 
 encode object
 
 ```
-./faker enc -n "mysession" -k "secret" -o "{user: admin, id: 0[int]}"
+$ ./faker enc -n "mysession" -k "secret" -o "{user: admin, id: 0[int]}"
 ```
 
-`-o `: the object string，its like a K-V map, it should have type hints
+`-o `: object string，its like a K-V map, it should have type hints
 
-`-n` : the cookie name, its required because the HMAC hash's generation relies on it
+`-n` : cookie name, its required because the HMAC hash's generation relies on it
 
-`-k` : the secret key(s), could be multiple: `-k "key1, key2"`, the first is hash key, and the second is encrypt block key
+`-k` : secret key(s), could be multiple: `-k "key1, key2"`, the first is hash key, and the second is encrypt block key
 
 when element's type is `string`, the type tag can be omitted
 
@@ -87,10 +89,15 @@ type tag can only be `int`,  `uint`,  `float`,  `bool`,  `string`,  `byte`
 
 ***
 
-select a serializer
+change serializer
 
 ```
-./faker enc -n "mysession" -k "secret" -o "some-string" -w json
-./faker enc -n "mysession" -k "secret" -o "{id: 0[int]}" -w json
-./faker enc -n "mysession" -k "secret" -o "some-string" -w nop
+$ ./faker enc -n "mysession" -k "secret" -o "some-string" -way json
+
+$ ./faker enc -n "mysession" -k "secret" -o "{id: 0[int]}" -way json
+
+$ ./faker enc -n "mysession" -k "secret" -o "some-string" -way nop
+
+$ ./faker dec -c "MTU2NjkxMjI4NXxleUoxYzJWeUlqb2lZV1J0YVc0aWZRbz18OibftwH33BZStXtep7TbN_mbyk8RftQe9t_wxCJXhHo=" -way json
 ```
+

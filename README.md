@@ -26,6 +26,8 @@ and many personal application using them as a basic web application toolkit [lin
 
 ## Usage
 
+you can build from source code or download binaries from [releases page](https://github.com/EddieIvan01/secure-cookie-faker/releases)
+
 ```
 Secure Cookie Faker v0.1
 
@@ -51,7 +53,8 @@ Options:
   -c string
         cookie to be decoded
         if mode is decode, this param is required
-  -way string                                                                                   serialize way: gob | json | nop, default is gob (default "gob")
+  -way string
+        serialize way: gob | json | nop, default is gob (default "gob")
 ```
 
 ## Example
@@ -76,9 +79,9 @@ encode object
 
 `-n` : the cookie name, its required because the HMAC hash's generation relies on it
 
-`-k` : the secret key(s), could be multiple: `-k "key1, key2"`, the first is hash key, the second is encrypt block key
+`-k` : the secret key(s), could be multiple: `-k "key1, key2"`, the first is hash key, and the second is encrypt block key
 
-when the element is `string` type, the type tag can be omitted
+when element's type is `string`, the type tag can be omitted
 
 type tag can only be `int`,  `uint`,  `float`,  `bool`,  `string`,  `byte`
 

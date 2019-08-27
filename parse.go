@@ -65,85 +65,57 @@ func setVal(t string, v string) (interface{}, error) {
 }
 
 // KVS is like [["k1[t1]", "v1[t2]"], ["k1[t3]", "v1[t4]"]]
-func (s KVS) parseGob() (Obj, error) {
-	var key, value string
-	var keyT, valueT string
-	var k, v interface{}
-	var tmp []string
-	var err error
-
-	o := make(Obj)
-
-	for _, kv := range s {
-		tmp = strings.Split(kv[0], "[")
-		key = tmp[0]
-		if len(tmp) == 1 {
-			keyT = "string"
-		} else {
-			keyT = tmp[1][:len(tmp[1])-1]
+func (s KVS) parse(o interface{}) (interface{}, error) {
+	switch o := o.(type) {
+	case Obj:
+		for _, kv := range s {
+			k, v, err := setKV(kv)
+			if err != nil {
+				return nil, err
+			}
+			o[k] = v
 		}
-
-		k, err = setVal(keyT, key)
-		if err != nil {
-			return nil, err
+	case JSON:
+		for _, kv := range s {
+			k, v, err := setKV(kv)
+			if err != nil {
+				return nil, err
+			}
+			o[k.(string)] = v
 		}
-
-		tmp = strings.Split(kv[1], "[")
-		value = tmp[0]
-		if len(tmp) == 1 {
-			valueT = "string"
-		} else {
-			valueT = tmp[1][:len(tmp[1])-1]
-		}
-
-		v, err = setVal(valueT, value)
-		if err != nil {
-			return nil, err
-		}
-
-		o[k] = v
 	}
-
 	return o, nil
 }
 
-// parse JSON: map[string]interface{}
-func (s KVS) parseJSON() (JSON, error) {
+func setKV(kv KV) (interface{}, interface{}, error) {
 	var key, value string
 	var keyT, valueT string
 	var k, v interface{}
 	var tmp []string
 	var err error
 
-	o := make(JSON)
+	tmp = strings.Split(kv[0], "[")
+	key = tmp[0]
+	keyT = "string"
 
-	for _, kv := range s {
-		tmp = strings.Split(kv[0], "[")
-		key = tmp[0]
-		keyT = "string"
-
-		k, err = setVal(keyT, key)
-		if err != nil {
-			return nil, err
-		}
-
-		tmp = strings.Split(kv[1], "[")
-		value = tmp[0]
-		if len(tmp) == 1 {
-			valueT = "string"
-		} else {
-			valueT = tmp[1][:len(tmp[1])-1]
-		}
-
-		v, err = setVal(valueT, value)
-		if err != nil {
-			return nil, err
-		}
-
-		o[k.(string)] = v
+	k, err = setVal(keyT, key)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	return o, nil
+	tmp = strings.Split(kv[1], "[")
+	value = tmp[0]
+	if len(tmp) == 1 {
+		valueT = "string"
+	} else {
+		valueT = tmp[1][:len(tmp[1])-1]
+	}
+
+	v, err = setVal(valueT, value)
+	if err != nil {
+		return nil, nil, err
+	}
+	return k, v, nil
 }
 
 // "key" or "key1, key2, key3"
@@ -195,9 +167,8 @@ func ParseObjString(s string, serialize string) (interface{}, error) {
 
 	switch serialize {
 	case "gob":
-		return kvs.parseGob()
+		return kvs.parse(make(Obj))
 	default:
-		return kvs.parseJSON()
+		return kvs.parse(make(JSON))
 	}
-
 }

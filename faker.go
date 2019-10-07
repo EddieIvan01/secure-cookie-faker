@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"flag"
 	"fmt"
 	"os"
@@ -49,6 +50,8 @@ func init() {
 
 	enc.Usage = usage
 	dec.Usage = usage
+
+	gob.Register([]interface{}{})
 }
 
 func usage() {
@@ -171,4 +174,5 @@ func main() {
 			fmt.Println(string(ret.([]byte)))
 		}
 	}
+}
 }
